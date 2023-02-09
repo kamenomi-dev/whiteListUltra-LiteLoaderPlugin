@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+    "composite": true,
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "allowJs": true,
+    "sourceMap": true,
+    "rootDir": "",
+    "outFile": "dist/whiteListUltra.js",
+    // "outDir": "./core/dist",
+    "esModuleInterop": false,
+    // "allowImportingTsExtensions":true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "removeComments": true
+  },
+  "compileOnSave": true,
+  "include": [
+    "whiteListUltra",
+  ],
+  "exclude": [
+    "dist"
+  ]
+}
