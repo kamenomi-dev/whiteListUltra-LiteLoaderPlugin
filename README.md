@@ -19,3 +19,7 @@ blacklist - reason - time limit
 on 2023 02 10 03:31
 [+] Base Logic
 [WARN] the Minecraft Commands doesn't work! i will fix it, because i feel tired now : /
+
+on 2023 02 10 02:22
+[+] Better Console Output.
+[WARN] the Minecraft Commands has something wrong, : /
