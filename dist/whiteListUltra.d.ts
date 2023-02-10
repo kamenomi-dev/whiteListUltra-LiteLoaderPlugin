@@ -1,5 +1,7 @@
 /// <reference path="../Common/dts/HelperLib-master/src/index.d.ts" />
+declare function whiteListUltra_CommandProc(command: Command, caller: CommandOrigin, resultOutput: CommandOutput, args: any): void;
 declare class fileSystem {
+    readonly fileConfigPath = ".\\plugins\\whiteListUltra\\";
     readonly serverProtocolVersion: number;
     addPlayerInfo(playerInfo: commonPlayerInfo): boolean;
     removePlayerInfo(playerRealName: string): boolean;
@@ -10,7 +12,6 @@ declare var globalVariable: {
     whiteListUltra: {
         fileSystem: fileSystem;
         config: whiteListUltraConfig;
-        command: Command;
     };
 };
 type whiteListUltraConfig = {
@@ -35,6 +36,7 @@ type commonPlayerInfo = {
     bannedTime: number;
     bannedResult: string;
 };
+declare function playerProc(Player: Player): void;
 declare class dataSystem {
     readonly configDefault: any;
     initDatabase(resMission?: boolean): DBSession | boolean;
