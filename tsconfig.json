@@ -2,10 +2,10 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     "composite": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ESNext"],
     "target": "ESNext",
     "allowJs": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "rootDir": "",
     "outFile": "dist/whiteListUltra.js",
     // "outDir": "./core/dist",
