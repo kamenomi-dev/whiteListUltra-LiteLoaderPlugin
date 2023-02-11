@@ -9,7 +9,7 @@
 
 ### 开源协议
 
-Apache 2.0 License
+[Apache 2.0 License](https://github.com/CreaklerFurry/whiteListUltra-LLBDS-Plugin/blob/main/LICENSE)
 
 ### 开发者
 
