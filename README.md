@@ -18,7 +18,7 @@ Apache 2.0 License
 ### dependence
 
 1. [TypeScript](https://github.com/microsoft/TypeScript) by [Microsoft](https://github.com/microsoft)
-2. [LiteLoader BDS](https://github.com/LiteLDev/LiteLoaderBDS) - by [LiteLDev](https://github.com/LiteLDev)
+2. [LiteLoader BDS](https://github.com/LiteLDev/LiteLoaderBDS) by [LiteLDev](https://github.com/LiteLDev)
 
 ### description
 
