@@ -10,10 +10,14 @@ function playerProc(Player: Player) {
   var pluginMessages = globalVariable.whiteListUltra.config.eventMessages;
   var playerInfo = globalVariable.whiteListUltra.fileSystem.getPlayerInfo(Player.realName) as commonPlayerInfo;
   var isFirstJoin = typeof playerInfo == 'undefined';
-  var isSetBefore = playerInfo.uuid == '' && playerInfo.xuid == '';
   var bannedReason = isFirstJoin ? '无' : playerInfo.bannedResult || '无';
   var currentTick = new Date().valueOf();
   var procResult = 0;
+
+  var isSetBefore: boolean
+    = !isFirstJoin && 'uuid' in playerInfo && 'xuid' in playerInfo
+    ? playerInfo.uuid == '' && playerInfo.xuid == ''
+    : false;
 
   (function logic () {
     // op permission proc.

@@ -11,8 +11,7 @@ mc.listen('onServerStarted', () => {
 ██║███╗██║██╔══██║██║   ██║   ██╔══╝  ██║     ██║╚════██║   ██║       ██║   ██║██║     ██║   ██╔══██╗██╔══██║
 ╚███╔███╔╝██║  ██║██║   ██║   ███████╗███████╗██║███████║   ██║       ╚██████╔╝███████╗██║   ██║  ██║██║  ██║
  ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝╚══════╝╚═╝╚══════╝   ╚═╝        ╚═════╝ ╚══════╝╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝
-version - 20230212.2.1.0-WhiteListUltra-release     Powered by Huang Youzhen     License: Apache 2.0 License.
-  `);
+version - ${pluginSubmitTime}.${pluginVerison}-WhiteListUltra-${pluginVersionStatus}     Powered by ${pluginAuthor}     License: ${pluginLicense}`);
   const pluginMainCmd = mc.newCommand('whitelistultra', 'LiteLoader Plugin Script - whiteListUltra', PermType.GameMasters);
   pluginMainCmd.setAlias('wl');
   pluginMainCmd.setEnum('Lists', ['whitelist', 'blacklist']);
