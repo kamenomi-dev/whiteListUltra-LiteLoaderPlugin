@@ -1,11 +1,19 @@
 /// <reference path="../Common/dts/HelperLib-master/src/index.d.ts" />
-declare function whiteListUltra_CommandProc(command: Command, caller: CommandOrigin, resultOutput: CommandOutput, args: any): void;
+declare function whiteListUltra_CommandProc(command: Command, caller: CommandOrigin, resultOutput: CommandOutput, args: {
+    A_Arg: string;
+    B_Arg: string;
+    player: string;
+    time: string;
+    reason: string;
+}): void;
 declare class fileSystem {
     readonly fileConfigPath = ".\\plugins\\whiteListUltra\\";
     readonly serverProtocolVersion: number;
+    private getInfoClass;
     addPlayerInfo(playerInfo: commonPlayerInfo): boolean;
     removePlayerInfo(playerRealName: string): boolean;
     getPlayerInfo(playerRealName: string): commonPlayerInfo | null;
+    getListAll(isWhiteList?: boolean, isAll?: boolean, outp?: CommandOutput): string;
     readConfigFile(): whiteListUltraConfig;
 }
 declare var globalVariable: {
