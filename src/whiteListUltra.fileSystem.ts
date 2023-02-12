@@ -1,24 +1,49 @@
 class fileSystem {
   readonly fileConfigPath = '.\\plugins\\whiteListUltra\\';
   readonly serverProtocolVersion = mc.getServerProtocolVersion();
+
+  private getInfoClass() {
+    return new JsonConfigFile(`${this.fileConfigPath}playerInfo.json`)
+  }
+  /* WHITE / BLACK LIST */
   public addPlayerInfo(playerInfo: commonPlayerInfo): boolean {
-    var infoJsonFile = new JsonConfigFile(`${this.fileConfigPath}playerInfo.json`);
+    var infoJsonFile = this.getInfoClass();
     var procResult = infoJsonFile.set(playerInfo.playerName, playerInfo);
     infoJsonFile.close();
     return procResult;
   };
   public removePlayerInfo(playerRealName: string): boolean {
-    var infoJsonFile = new JsonConfigFile(`${this.fileConfigPath}playerInfo.json`);
+    var infoJsonFile = this.getInfoClass();
     var procResult = infoJsonFile.delete(playerRealName);
     infoJsonFile.close();
     return procResult;
   };
   public getPlayerInfo(playerRealName: string): commonPlayerInfo | null {
-    var infoJsonFile = new JsonConfigFile(`${this.fileConfigPath}playerInfo.json`);
+    var infoJsonFile = this.getInfoClass();
     var procResult = infoJsonFile.get(playerRealName) as commonPlayerInfo | null;
     infoJsonFile.close();
     return procResult;
   };
+  public getListAll(isWhiteList: boolean = true, isAll?: boolean, outp?: CommandOutput) {
+    var infoJsonFile = this.getInfoClass();
+    var jsonObject = Object.values(JSON.parse(infoJsonFile.read()));
+    var resultPlayer: string = `===${isAll ? 'All' : (isWhiteList ? 'White' : 'Black')}===\n`;
+
+    jsonObject.map(item => {
+      var player = item as commonPlayerInfo;
+      if ((isWhiteList && player.whited) || (!isWhiteList && player.banned) || isAll) {
+        resultPlayer += `[${player.playerName}] W: ${player.whited} B: ${player.banned}\n`;
+      };
+    });
+    infoJsonFile.close();
+    resultPlayer += '=== List End ===';
+    if (outp)
+      resultPlayer.split('\n').map(item => {
+        outp.addMessage(item);
+      });
+    return resultPlayer;
+  }
+  /* CONFIG */
   public readConfigFile(): whiteListUltraConfig {
     var configJsonFile = new JsonConfigFile(`${this.fileConfigPath}config.json`, JSON.stringify({
       eventMessages: {

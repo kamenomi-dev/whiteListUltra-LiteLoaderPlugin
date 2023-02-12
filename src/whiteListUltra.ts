@@ -10,11 +10,25 @@ function playerProc(Player: Player) {
   var pluginMessages = globalVariable.whiteListUltra.config.eventMessages;
   var playerInfo = globalVariable.whiteListUltra.fileSystem.getPlayerInfo(Player.realName) as commonPlayerInfo;
   var isFirstJoin = typeof playerInfo == 'undefined';
+  var isSetBefore = playerInfo.uuid == '' && playerInfo.xuid == '';
   var bannedReason = isFirstJoin ? '无' : playerInfo.bannedResult || '无';
   var currentTick = new Date().valueOf();
   var procResult = 0;
 
   (function logic () {
+    // op permission proc.
+    if (Player.isOP())
+      return;
+
+    // full data if it was set before.
+    if (isSetBefore) {
+      playerInfo.xuid = Player.xuid;
+      playerInfo.uuid = Player.uuid;
+
+      procResult = globalVariable.whiteListUltra.fileSystem.addPlayerInfo(playerInfo) ? 1 : 0;
+      return;
+    };
+
     // define infomation
     if (isFirstJoin) {
       procResult = globalVariable.whiteListUltra.fileSystem.addPlayerInfo({
@@ -27,6 +41,8 @@ function playerProc(Player: Player) {
         bannedTime: 0,
         bannedResult: ''
       }) ? 1 : 0;
+      Player.disconnect(pluginMessages.whitelist.on_have_no_permission);
+      return;
     };
 
     // check premission
