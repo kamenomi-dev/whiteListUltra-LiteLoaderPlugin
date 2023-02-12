@@ -16,6 +16,13 @@ declare class fileSystem {
     getListAll(isWhiteList?: boolean, isAll?: boolean, outp?: CommandOutput): string;
     readConfigFile(): whiteListUltraConfig;
 }
+declare const pluginName = "WhiteListUltra";
+declare const pluginAuthor = "Huang Youzhen";
+declare const pluginLicense = "Apache 2.0 License";
+declare const pluginConfigPath = ".\\plugins\\whiteListUltra\\";
+declare const pluginSubmitTime = "20230212";
+declare const pluginVerison = "2.1.1";
+declare const pluginVersionStatus = "Release";
 declare var globalVariable: {
     whiteListUltra: {
         fileSystem: fileSystem;

@@ -7,8 +7,7 @@ mc.listen('onServerStarted', () => {
 ██║███╗██║██╔══██║██║   ██║   ██╔══╝  ██║     ██║╚════██║   ██║       ██║   ██║██║     ██║   ██╔══██╗██╔══██║
 ╚███╔███╔╝██║  ██║██║   ██║   ███████╗███████╗██║███████║   ██║       ╚██████╔╝███████╗██║   ██║  ██║██║  ██║
  ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝╚══════╝╚═╝╚══════╝   ╚═╝        ╚═════╝ ╚══════╝╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝
-version - 20230212.2.1.0-WhiteListUltra-release     Powered by Huang Youzhen     License: Apache 2.0 License.
-  `);
+version - ${pluginSubmitTime}.${pluginVerison}-WhiteListUltra-${pluginVersionStatus}     Powered by ${pluginAuthor}     License: ${pluginLicense}`);
     const pluginMainCmd = mc.newCommand('whitelistultra', 'LiteLoader Plugin Script - whiteListUltra', PermType.GameMasters);
     pluginMainCmd.setAlias('wl');
     pluginMainCmd.setEnum('Lists', ['whitelist', 'blacklist']);
@@ -180,10 +179,21 @@ class fileSystem {
     ;
 }
 ;
+const pluginName = 'WhiteListUltra';
+const pluginAuthor = 'Huang Youzhen';
+const pluginLicense = 'Apache 2.0 License';
+const pluginConfigPath = '.\\plugins\\whiteListUltra\\';
+const pluginSubmitTime = '20230212';
+const pluginVerison = '2.1.1';
+const pluginVersionStatus = 'Release';
 logger.setTitle('WhiteList-Ultra');
 if (!ll.requireVersion(2, 9, 0))
     logger.warn('当前 LiteLoader 版本过低，发生任何错误将不进行修复，请更新至 v2.9.0 或以上');
-ll.registerPlugin("WhiteListUltra", "A Ultra Whitelist Helper For Minecraft Bedrock Edition", [1, 0, 0], {
+ll.registerPlugin(pluginName, "A Ultra Whitelist Helper For Minecraft Bedrock Edition", [
+    Number(pluginVerison.split('.')[0]),
+    Number(pluginVerison.split('.')[1]),
+    Number(pluginVerison.split('.')[2]),
+], {
     License: 'Apache 2.0 License',
     copyright: 'copyright (c) Creakler'
 });
@@ -204,10 +214,12 @@ function playerProc(Player) {
     var pluginMessages = globalVariable.whiteListUltra.config.eventMessages;
     var playerInfo = globalVariable.whiteListUltra.fileSystem.getPlayerInfo(Player.realName);
     var isFirstJoin = typeof playerInfo == 'undefined';
-    var isSetBefore = playerInfo.uuid == '' && playerInfo.xuid == '';
     var bannedReason = isFirstJoin ? '无' : playerInfo.bannedResult || '无';
     var currentTick = new Date().valueOf();
     var procResult = 0;
+    var isSetBefore = !isFirstJoin && 'uuid' in playerInfo && 'xuid' in playerInfo
+        ? playerInfo.uuid == '' && playerInfo.xuid == ''
+        : false;
     (function logic() {
         if (Player.isOP())
             return;
