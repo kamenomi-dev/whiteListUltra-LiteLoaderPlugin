@@ -1,35 +1,48 @@
-/// <reference path="../Common/dts/HelperLib-master/src/index.d.ts" />
+/// <reference path="../../Common/dts/HelperLib-master/src/index.d.ts" />
 declare function whiteListUltra_CommandProc(command: Command, caller: CommandOrigin, resultOutput: CommandOutput, args: {
-    A_Arg: string;
-    B_Arg: string;
+    option: string;
+    method: string;
     player: string;
     time: string;
     reason: string;
 }): void;
 declare class fileSystem {
-    readonly fileConfigPath = ".\\plugins\\whiteListUltra\\";
-    readonly serverProtocolVersion: number;
+    configPath: string;
     private getInfoClass;
-    addPlayerInfo(playerInfo: commonPlayerInfo): boolean;
-    removePlayerInfo(playerRealName: string): boolean;
-    getPlayerInfo(playerRealName: string): commonPlayerInfo | null;
+    editPlayerInfo(option: 'get', playerData: string | TPlayerData): TPlayerData | null;
+    editPlayerInfo(option: 'set' | 'delete', playerData: string | TPlayerData): boolean;
     getListAll(isWhiteList?: boolean, isAll?: boolean, outp?: CommandOutput): string;
-    readConfigFile(): whiteListUltraConfig;
+    readMessageConfigFile(): TMessageConfig;
 }
-declare const pluginName = "WhiteListUltra";
-declare const pluginAuthor = "Huang Youzhen";
-declare const pluginLicense = "Apache 2.0 License";
-declare const pluginConfigPath = ".\\plugins\\whiteListUltra\\";
-declare const pluginSubmitTime = "20230212";
-declare const pluginVerison = "2.1.1";
-declare const pluginVersionStatus = "Release";
-declare var globalVariable: {
-    whiteListUltra: {
-        fileSystem: fileSystem;
-        config: whiteListUltraConfig;
-    };
+declare var GPlugin: TPluginConfig;
+declare var ver: number[];
+declare var info: {
+    name: string;
+    author: string;
+    license: string;
+    projectUrl: string;
+    issueReportUrl: string;
+    configPath: string;
+    version: string;
+    versionTime: string;
+    versionStatus: string;
 };
-type whiteListUltraConfig = {
+type TPluginConfig = {
+    info: {
+        name: string;
+        author: string;
+        license: string;
+        projectUrl: string;
+        issueReportUrl: string;
+        configPath: string;
+        version: string;
+        versionTime: string;
+        versionStatus: string;
+    };
+    fileSystem: fileSystem;
+    config?: TMessageConfig;
+};
+type TMessageConfig = {
     eventMessages: {
         whitelist: {
             on_timed_out: string;
@@ -41,7 +54,7 @@ type whiteListUltraConfig = {
         };
     };
 };
-type commonPlayerInfo = {
+type TPlayerData = {
     playerName: string;
     xuid: string;
     uuid: string;
@@ -51,11 +64,15 @@ type commonPlayerInfo = {
     bannedTime: number;
     bannedResult: string;
 };
+declare var pluginInfo: {
+    name: string;
+    author: string;
+    license: string;
+    projectUrl: string;
+    issueReportUrl: string;
+    configPath: string;
+    version: string;
+    versionTime: string;
+    versionStatus: string;
+};
 declare function playerProc(Player: Player): void;
-declare class dataSystem {
-    readonly configDefault: any;
-    initDatabase(resMission?: boolean): DBSession | boolean;
-    getConfig(): whiteListUltraConfig;
-    addPlayer(Player: Player, UnixStamp: number): void;
-    setPlayer(data: commonPlayerInfo): void;
-}
