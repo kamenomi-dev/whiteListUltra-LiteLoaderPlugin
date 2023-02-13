@@ -1,25 +1,36 @@
-mc.listen('onServerStarted', () => {
-  logger.log('Successfully running the server!');
-  logger.log('Powered by Creakler');
-});
+var pluginInfo = GPlugin.info;
+logger.log(`
+██╗    ██╗██╗  ██╗██╗████████╗███████╗██╗     ██╗███████╗████████╗    ██╗   ██╗██╗  ████████╗██████╗  █████╗ 
+██║    ██║██║  ██║██║╚══██╔══╝██╔════╝██║     ██║██╔════╝╚══██╔══╝    ██║   ██║██║  ╚══██╔══╝██╔══██╗██╔══██╗
+██║ █╗ ██║███████║██║   ██║   █████╗  ██║     ██║███████╗   ██║       ██║   ██║██║     ██║   ██████╔╝███████║
+██║███╗██║██╔══██║██║   ██║   ██╔══╝  ██║     ██║╚════██║   ██║       ██║   ██║██║     ██║   ██╔══██╗██╔══██║
+╚███╔███╔╝██║  ██║██║   ██║   ███████╗███████╗██║███████║   ██║       ╚██████╔╝███████╗██║   ██║  ██║██║  ██║
+╚══╝╚══╝ ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝╚══════╝╚═╝╚══════╝   ╚═╝        ╚═════╝ ╚══════╝╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝
+Version - ${pluginInfo.versionTime}.${pluginInfo.version}-WhiteListUltra-${pluginInfo.versionStatus}     Powered by ${pluginInfo.author}     License: ${pluginInfo.license}
+Github Project Url: ${pluginInfo.projectUrl}
+
+${
+  pluginInfo.versionStatus == 'AlphaDev'? `当前版本状态为 AlphaDev 开服测试版本
+若发生bug, 请提交至 ${pluginInfo.issueReportUrl}\n` : ''
+}
+`);
+
+
+// =============================================================================================================================================//
 mc.listen('onPreJoin', (Player) => {
   playerProc(Player);
 });
 
 function playerProc(Player: Player) {
-  var pluginMessages = globalVariable.whiteListUltra.config.eventMessages;
-  var playerInfo = globalVariable.whiteListUltra.fileSystem.getPlayerInfo(Player.realName) as commonPlayerInfo;
-  var isFirstJoin = typeof playerInfo == 'undefined';
+  var messages = GPlugin.config!.eventMessages;
+  var playerInfo = GPlugin.fileSystem.editPlayerInfo('get', Player.realName) as TPlayerData;
+  var isFirstJoin = playerInfo == null;
   var bannedReason = isFirstJoin ? '无' : playerInfo.bannedResult || '无';
-  var currentTick = new Date().valueOf();
+  var currentTime = new Date().valueOf();
   var procResult = 0;
 
-  var isSetBefore: boolean
-    = !isFirstJoin && 'uuid' in playerInfo && 'xuid' in playerInfo
-    ? playerInfo.uuid == '' && playerInfo.xuid == ''
-    : false;
-
-  (function logic () {
+  var isSetBefore: boolean = isFirstJoin ? false : playerInfo.uuid == 'undefined' && playerInfo.xuid == playerInfo.uuid;
+  ; (function logic() {
     // op permission proc.
     if (Player.isOP())
       return;
@@ -29,13 +40,12 @@ function playerProc(Player: Player) {
       playerInfo.xuid = Player.xuid;
       playerInfo.uuid = Player.uuid;
 
-      procResult = globalVariable.whiteListUltra.fileSystem.addPlayerInfo(playerInfo) ? 1 : 0;
-      return;
+      procResult = Number(GPlugin.fileSystem.editPlayerInfo('set', playerInfo));
     };
 
     // define infomation
     if (isFirstJoin) {
-      procResult = globalVariable.whiteListUltra.fileSystem.addPlayerInfo({
+      procResult = Number(GPlugin.fileSystem.editPlayerInfo('set', {
         playerName: Player.realName,
         xuid: Player.xuid,
         uuid: Player.uuid,
@@ -44,58 +54,56 @@ function playerProc(Player: Player) {
         banned: false,
         bannedTime: 0,
         bannedResult: ''
-      }) ? 1 : 0;
-      Player.disconnect(pluginMessages.whitelist.on_have_no_permission);
+      }));
+      Player.disconnect(messages.whitelist.on_have_no_permission);
       return;
     };
 
     // check premission
     if (!playerInfo.banned && (isFirstJoin || !playerInfo.whited)) {
       procResult = 2;
-      Player.disconnect(pluginMessages.whitelist.on_have_no_permission);
+      Player.disconnect(messages.whitelist.on_have_no_permission);
       return;
     };
 
     // check have timed out of whiteList
-    if (playerInfo.whited && playerInfo.unwhiteTime < currentTick && playerInfo.unwhiteTime != 0) {
+    if (playerInfo.whited && playerInfo.unwhiteTime < currentTime && playerInfo.unwhiteTime != 0) {
       procResult = 3;
       playerInfo.unwhiteTime = 0;
       playerInfo.whited = false;
-      globalVariable.whiteListUltra.fileSystem.addPlayerInfo(playerInfo);
-      Player.disconnect(pluginMessages.whitelist.on_timed_out);
+      GPlugin.fileSystem.editPlayerInfo('set', playerInfo);
+      Player.disconnect(messages.whitelist.on_timed_out);
       return;
     };
 
-    // if on banned
+    // if the player banned
     if (playerInfo.banned) {
-      if (playerInfo.bannedTime > currentTick) {
+      if (playerInfo.bannedTime > currentTime) {
         procResult = 4;
         Player
-          .disconnect(pluginMessages.blacklist.on_default_reason_hasTime
+          .disconnect(messages.blacklist.on_default_reason_hasTime
             .replace('{%t}', new Date(playerInfo.bannedTime).toDateString()));
         return;
       } else if (playerInfo.bannedTime == 0) {
         procResult = 5;
         Player.disconnect(
-          pluginMessages.blacklist.on_default_reason_noTime
-          + '\n理由: '
-          + bannedReason);
+`${messages.blacklist.on_default_reason_noTime}
+理由: ${bannedReason}`);
         return;
       };
     };
   })();
   {
-    let prefixFormat = `${Player.realName} - ${Player.uuid}`
     let feedback: string[] = [
-      `${prefixFormat} 成功通过服务器白名单校验。`,
-      `${prefixFormat} ${Player.ip} 是一位新来的玩家。`,
-      `${prefixFormat} 没有该服务器的白名单权限。`,
-      `${prefixFormat} 所持有的白名单权限已过期。`,
-      `${prefixFormat} 现处于有时长的白名单封禁。`,
-      `${prefixFormat} 现处于服务器白名单封禁中。`
+      '成功通过服务器白名单校验。',
+      '是一位新来的玩家。'       ,
+      '没有该服务器的白名单权限。',
+      '所持有的白名单权限已过期。',
+      '现处于有时长的白名单封禁。',
+      '现处于服务器白名单封禁中。'
     ];
-    logger.log(feedback[procResult]);
+    logger.log(`${Player.realName} - ${Player.uuid} ${feedback[procResult]}`);
     if (procResult >= 5)
-      logger.log(`被封禁原因: ${bannedReason}`);
+      logger.log(`玩家被封禁原因: ${bannedReason}`);
   };
 };

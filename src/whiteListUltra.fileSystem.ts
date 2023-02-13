@@ -1,36 +1,35 @@
 class fileSystem {
-  readonly fileConfigPath = '.\\plugins\\whiteListUltra\\';
-  readonly serverProtocolVersion = mc.getServerProtocolVersion();
-
+  public configPath: string = '';
   private getInfoClass() {
-    return new JsonConfigFile(`${this.fileConfigPath}playerInfo.json`)
-  }
+    return new JsonConfigFile(`${this.configPath}playerInfo.json`)
+  };
+
   /* WHITE / BLACK LIST */
-  public addPlayerInfo(playerInfo: commonPlayerInfo): boolean {
+  public editPlayerInfo(option: 'get', playerData: string | TPlayerData): TPlayerData | null
+  public editPlayerInfo(option: 'set' | 'delete', playerData: string | TPlayerData): boolean
+  public editPlayerInfo(option: 'set' | 'delete' | 'get', playerData: string | TPlayerData): boolean | TPlayerData | null {
     var infoJsonFile = this.getInfoClass();
-    var procResult = infoJsonFile.set(playerInfo.playerName, playerInfo);
+    var procResult: any;
+    if (typeof playerData == 'object') {
+      if(option == 'set') {
+        procResult = infoJsonFile.set(playerData.playerName, playerData);
+      };
+    }else{
+      if (RegExp(/[\~\`\!\@\#\$\%\^\&\*\(\)\_\+\-\=\{\}\|\[\]\\\:\"\;\'\<\>\?\,\.\/]+/g).test(playerData))
+        return null;
+      procResult = eval(`infoJsonFile.${option}('${playerData}')`);
+    }
     infoJsonFile.close();
     return procResult;
   };
-  public removePlayerInfo(playerRealName: string): boolean {
-    var infoJsonFile = this.getInfoClass();
-    var procResult = infoJsonFile.delete(playerRealName);
-    infoJsonFile.close();
-    return procResult;
-  };
-  public getPlayerInfo(playerRealName: string): commonPlayerInfo | null {
-    var infoJsonFile = this.getInfoClass();
-    var procResult = infoJsonFile.get(playerRealName) as commonPlayerInfo | null;
-    infoJsonFile.close();
-    return procResult;
-  };
+
   public getListAll(isWhiteList: boolean = true, isAll?: boolean, outp?: CommandOutput) {
     var infoJsonFile = this.getInfoClass();
     var jsonObject = Object.values(JSON.parse(infoJsonFile.read()));
     var resultPlayer: string = `===${isAll ? 'All' : (isWhiteList ? 'White' : 'Black')}===\n`;
 
     jsonObject.map(item => {
-      var player = item as commonPlayerInfo;
+      var player = item as TPlayerData;
       if ((isWhiteList && player.whited) || (!isWhiteList && player.banned) || isAll) {
         resultPlayer += `[${player.playerName}] W: ${player.whited} B: ${player.banned}\n`;
       };
@@ -44,8 +43,8 @@ class fileSystem {
     return resultPlayer;
   }
   /* CONFIG */
-  public readConfigFile(): whiteListUltraConfig {
-    var configJsonFile = new JsonConfigFile(`${this.fileConfigPath}config.json`, JSON.stringify({
+  public readMessageConfigFile(): TMessageConfig {
+    var configJsonFile = new JsonConfigFile(`${this.configPath}config.json`, JSON.stringify({
       eventMessages: {
         whitelist: {
           on_timed_out: "您的白名单权限已过期！",
@@ -57,7 +56,7 @@ class fileSystem {
         }
       }
     }));
-    var procResult = JSON.parse(configJsonFile.read()) as whiteListUltraConfig;
+    var procResult = JSON.parse(configJsonFile.read()) as TMessageConfig;
     configJsonFile.close();
     return procResult;
   };
