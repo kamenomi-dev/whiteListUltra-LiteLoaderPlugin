@@ -19,6 +19,7 @@ A Ultra Whitelist Helper Plugin For Minecraft Bedrock Edition.
 
 1. [TypeScript](https://github.com/microsoft/TypeScript) by [Microsoft](https://github.com/microsoft)
 2. [LiteLoader BDS](https://github.com/LiteLDev/LiteLoaderBDS) by [LiteLDev](https://github.com/LiteLDev)
+3. [LiteLoader SE-Aids](https://github.com/LiteLScript-Dev/LiteLoaderSE-Aids) by [LiteLScript](https://github.com/LiteLScript-Dev)
 
 ### description
 
