@@ -7,6 +7,10 @@ A Ultra Whitelist Helper Plugin For Minecraft Bedrock Edition.
 1. [ReadMe en-US](https://github.com/CreaklerFurry/whiteListUltra-LLBDS-Plugin/blob/main/README.md)
 2. [ReadMe zh-CN](https://github.com/CreaklerFurry/whiteListUltra-LLBDS-Plugin/blob/main/README_zh-CN.md)
 
+### Other Projects
+
+1. [LiteLoaderPlugin-Tool-QBot](https://github.com/CreaklerFurry/LiteLoaderPlugin-Tool-QBot)
+
 ### License
 
 [Apache 2.0 License](https://github.com/CreaklerFurry/whiteListUltra-LLBDS-Plugin/blob/main/LICENSE)
@@ -111,7 +115,7 @@ Blacklist - reason - time limit
 | ----------------- | ------------------------------------------------------------ |
 | Fix               | Fix Commands register Error.                                 |
 | Tips - My opinion | The plugin is use on Server [Fure BE Server] [See QQ Group](https://jq.qq.com/?_wv=1027&k=5EMMIPRn) |
-  
+
 #####  2023 02 12 19:26
 
 > We did!!!! :DDD
