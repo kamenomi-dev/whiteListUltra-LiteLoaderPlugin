@@ -2,10 +2,16 @@
 
 一个使用在Minecraft Bedrock Edition的 **超(Ultra)白名单插件**
 
+> === WARN 此 zh-CN README 已放弃翻译, 具体 README 见 en-US ===
+
 ##### ReadMe
 
 1. [ReadMe en-US](https://github.com/CreaklerFurry/whiteListUltra-LLBDS-Plugin/blob/main/README.md)
 2. [ReadMe zh-CN](https://github.com/CreaklerFurry/whiteListUltra-LLBDS-Plugin/blob/main/README_zh-CN.md)
+
+### 其他项目
+
+1. [LiteLoaderPlugin-Tool-QBot](https://github.com/CreaklerFurry/LiteLoaderPlugin-Tool-QBot)
 
 ### 开源协议
 
@@ -113,3 +119,8 @@ Blacklist - reason - time limit
 #####  2023 02 11 19:26
 
 > 我们做到了！！！：DDDDD
+
+|      |      |
+| ---- | ---- |
+|      |      |
+|      |      |
